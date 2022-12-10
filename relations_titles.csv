@@ -1,0 +1,88 @@
+﻿Relation,Label,Label_out
+http://www.wikidata.org/prop/direct/P31,a film,instance of
+http://www.wikidata.org/prop/direct/P31,a movie,instance of
+http://www.wikidata.org/prop/direct/P31,instance of,instance of
+http://www.wikidata.org/prop/direct/P364,original language,original language
+http://www.wikidata.org/prop/direct/P364,language,original language
+http://www.wikidata.org/prop/direct/P136,genre,genre
+http://www.wikidata.org/prop/direct/P57,direct,director
+http://www.wikidata.org/prop/direct/P57,director,director
+http://www.wikidata.org/prop/direct/P161,cast,cast
+http://www.wikidata.org/prop/direct/P161,cast member,cast
+http://www.wikidata.org/prop/direct/P344,photography director,director of photography
+http://www.wikidata.org/prop/direct/P344,director of photography,director of photography
+http://www.wikidata.org/prop/direct/P58,screenplay,screenwriter
+http://www.wikidata.org/prop/direct/P58,screenwriter,screenwriter
+http://www.wikidata.org/prop/direct/P1040,edit,film editor
+http://www.wikidata.org/prop/direct/P1040,film editor,film editor
+http://www.wikidata.org/prop/direct/P840,narrative location,narrative location
+http://www.wikidata.org/prop/direct/P915,filming location,filming location
+http://www.wikidata.org/prop/direct/P495,country of origin,country of origin
+http://www.wikidata.org/prop/direct/P1431,executive producer,executive producer
+http://www.wikidata.org/prop/direct/P272,production company,production company
+http://www.wikidata.org/prop/direct/P272,voic,voice actor
+http://www.wikidata.org/prop/direct/P725,voice actor,voice actor
+http://www.wikidata.org/prop/direct/P144,based on,based on
+http://www.wikidata.org/prop/direct/P1877,after a work by,after a work by
+http://www.wikidata.org/prop/direct/P921,main subject,main subject
+http://www.wikidata.org/prop/direct/P2408,time,set in period of
+http://www.wikidata.org/prop/direct/P2408,set in period,set in period of
+http://www.wikidata.org/prop/direct/P462,color,color
+http://www.wikidata.org/prop/direct/P2061,aspect ratio (W:H),aspect ratio (W:H)
+http://www.wikidata.org/prop/direct/P793,significant event,significant event
+http://www.wikidata.org/prop/direct/P179,part of the series,part of the series
+http://www.wikidata.org/prop/direct/P1889,different from,different from
+http://www.wikidata.org/prop/direct/P1552,has quality,has quality
+http://www.wikidata.org/prop/direct/P2438,narrator,narrator
+http://www.wikidata.org/prop/direct/P2515,costume designer,costume designer
+http://www.wikidata.org/prop/direct/P2554,production designer,production designer
+http://www.wikidata.org/prop/direct/P750,distributed by,distributed by
+http://www.wikidata.org/prop/direct/P6216,copyright status,copyright status
+http://www.wikidata.org/prop/direct/P5028,sound designer,sound designer
+http://www.wikidata.org/prop/direct/P5072,presented in,presented in
+http://www.wikidata.org/prop/direct/P166,award received,award received
+http://www.wikidata.org/prop/direct/P1411,nominated for,nominated for
+http://www.wikidata.org/prop/direct/P2360,intended for,intended public
+http://www.wikidata.org/prop/direct/P2360,intended public,intended public
+http://www.wikidata.org/prop/direct/P1657,MPA film rating,MPA film rating
+http://www.wikidata.org/prop/direct/P1981,FSK film rating,FSK film rating
+http://www.wikidata.org/prop/direct/P2363,NMHH film rating,NMHH film rating
+http://www.wikidata.org/prop/direct/P2758,CNC film rating (France),CNC film rating (France)
+http://www.wikidata.org/prop/direct/P2747,Filmiroda rating,Filmiroda rating
+http://www.wikidata.org/prop/direct/P2756,EIRIN film rating,EIRIN film rating
+http://www.wikidata.org/prop/direct/P3834,RTC film rating,RTC film rating
+http://www.wikidata.org/prop/direct/P3428,INCAA film rating,INCAA film rating
+http://www.wikidata.org/prop/direct/P3650,JMK film rating,JMK film rating
+http://www.wikidata.org/prop/direct/P3818,KMRB film rating,KMRB film rating
+http://www.wikidata.org/prop/direct/P4437,FPB rating,FPB rating
+http://www.wikidata.org/prop/direct/P5150,IGAC rating,IGAC rating
+http://www.wikidata.org/prop/direct/P5152,KAVI rating,KAVI rating
+http://www.wikidata.org/prop/direct/P5201,IMDA rating,IMDA rating
+http://www.wikidata.org/prop/direct/P6658,RCQ classification,RCQ classification
+http://www.wikidata.org/prop/direct/P1657,MPA rating,MPA film rating
+http://www.wikidata.org/prop/direct/P1981,FSK raing,FSK film rating
+http://www.wikidata.org/prop/direct/P2363,NMHH rating,NMHH film rating
+http://www.wikidata.org/prop/direct/P2758,CNC rating,CNC film rating (France)
+http://www.wikidata.org/prop/direct/P2756,EIRIN rating,EIRIN film rating
+http://www.wikidata.org/prop/direct/P3834,RTC rating,RTC film rating
+http://www.wikidata.org/prop/direct/P3428,INCAA rating,INCAA film rating
+http://www.wikidata.org/prop/direct/P3650,JMK rating,JMK film rating
+http://www.wikidata.org/prop/direct/P3818,KMRB rating,KMRB film rating
+http://www.wikidata.org/prop/direct/P1476,title,title
+http://www.wikidata.org/prop/direct/P577,publication date,publication date
+http://www.wikidata.org/prop/direct/P162,producer,producer
+http://www.wikidata.org/prop/direct/P18,image,image
+http://www.wikidata.org/prop/direct/P3383,film poster,film poster
+http://www.wikidata.org/prop/direct/P10,video,video
+http://www.wikidata.org/prop/direct/P86,composer,composer
+http://www.wikidata.org/prop/direct/P1881,list of characters,list of characters
+http://www.wikidata.org/prop/direct/P406,soundtrack release,soundtrack release
+http://www.wikidata.org/prop/direct/P2208,average shot length,average shot length
+http://www.wikidata.org/prop/direct/P1638,working title,working title
+http://www.wikidata.org/prop/direct/P2130,cost,cost
+http://www.wikidata.org/prop/direct/P2142,box office,box office
+http://www.wikidata.org/prop/direct/P2047,duration,duration
+http://www.wikidata.org/prop/direct/P444,review score,review score
+http://www.wikidata.org/prop/direct/P6657,CHVRS Classification,CHVRS Classification
+http://www.wikidata.org/prop/direct/P162,produc,producer
+http://www.wikidata.org/prop/direct/P1881,characters,list of characters
