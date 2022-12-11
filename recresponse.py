@@ -31,17 +31,27 @@ class RecResponse():
             dist = pairwise_distances(setup.entity_emb[ent].reshape(1, -1), setup.entity_emb).reshape(-1)
             # order by plausibility
             most_likely = dist.argsort()
+            most_likely_entities = [setup.id2ent[idx] for idx in most_likely[:10]]
+            #some entities pulled from embeddings don't have labels
+            most_likely_labels = [""]*10
+            for entix, ent in enumerate(most_likely_entities):
+                try:
+                    most_likely_labels[entix] = setup.ent2lbl[ent]
+                except:
+                    most_likely_labels[entix] = ""
             
-            df_results = pd.DataFrame([
-                (
-                    setup.id2ent[idx][len(WD):], # qid
-                    setup.ent2lbl[setup.id2ent[idx]],  # label
-                    dist[idx],             # score
-                    rank+1,                # rank
-                )
-                for rank, idx in enumerate(most_likely[:15])],
-                columns=('Entity', 'Label', 'Score', 'Rank'))
-            top_labels = np.unique(df_results['Label'][0:min(no_responses, len(df_results))].values)
+            # df_results = pd.DataFrame([
+            #     (
+            #         setup.id2ent[idx][len(WD):], # qid
+            #         setup.ent2lbl[setup.id2ent[idx]],  # label
+            #         dist[idx],             # score
+            #         rank+1,                # rank
+            #     )
+            #     for rank, idx in enumerate(most_likely[:15])],
+            #     columns=('Entity', 'Label', 'Score', 'Rank'))
+            
+            top_labels = most_likely_labels[0:no_responses]
+            #top_labels = np.unique(df_results['Label'][0:min(no_responses, len(df_results))].values)
             return top_labels
         
         labels_list = []

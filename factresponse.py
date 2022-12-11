@@ -54,19 +54,32 @@ class FactResponse():
             return pre_join+" and "+list_attr[len_list-1]
         
         def closest_response(entity, relation, no_responses):
+            #check if relation is in the embedding data (e.g. box office or year are not)
+            if relation in setup.all_embed_relations:
             # get embedding of the entity
-            head = setup.entity_emb[setup.ent2id[entity]]
-            pred = setup.relation_emb[setup.rel2id[relation]]
-            lhs = head + pred
-            dist = pairwise_distances(lhs.reshape(1, -1), setup.entity_emb).reshape(-1)
-            most_likely = dist.argsort()
-            df_results = pd.DataFrame([
-        (setup.id2ent[idx][len(WD):], setup.ent2lbl[setup.id2ent[idx]], dist[idx], rank+1)
-        for rank, idx in enumerate(most_likely[:10])],
-        columns=('Entity', 'Label', 'Score', 'Rank'))
-            #select top three labels
-            top_three_labels = np.unique(df_results['Label'][0:no_responses].values)
-            return top_three_labels
+                head = setup.entity_emb[setup.ent2id[entity]]
+                pred = setup.relation_emb[setup.rel2id[relation]]
+                lhs = head + pred
+                dist = pairwise_distances(lhs.reshape(1, -1), setup.entity_emb).reshape(-1)
+                most_likely = dist.argsort()
+                most_likely_entities = [setup.id2ent[idx] for idx in most_likely[:10]]
+                #some entities pulled from embeddings don't have labels
+                most_likely_labels = [""]*10
+                for entix, ent in enumerate(most_likely_entities):
+                    try:
+                        most_likely_labels[entix] = setup.ent2lbl[ent]
+                    except:
+                        most_likely_labels[entix] = ""
+            #     df_results = pd.DataFrame([
+            # (setup.id2ent[idx][len(WD):], setup.ent2lbl[setup.id2ent[idx]], dist[idx], rank+1)
+            # for rank, idx in enumerate(most_likely[:10])],
+            # columns=('Entity', 'Label', 'Score', 'Rank'))
+                #select top three labels
+                #top_three_labels = np.unique(df_results['Label'][0:no_responses].values)
+                top_three_labels = most_likely_labels[0:no_responses]
+                return top_three_labels
+            else:
+                return []
         
 
         #1. Pull all names    
@@ -100,13 +113,14 @@ class FactResponse():
                 return response_crowd
             
             #get closest responses
-            embedding_answers = closest_response(movie_ent_id, self.relation_urlstr)
+            embedding_answers = closest_response(movie_ent_id, self.relation_urlstr, 3)
             if len(embedding_answers) > 0:
-                response_out = ""
+                response_out = "I don't know the exact answer, but I've analyzed similar movies and I think the answer should be "+list_items_and(embedding_answers)
             else:
                 response_out = "No information found, sorry!"
             #TODO: check in embeddings
             return response_out
+        
         
         
         else:

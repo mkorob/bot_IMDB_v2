@@ -25,6 +25,7 @@ def init():
     global entity_emb
     global relation_emb
     global all_films_names
+    global all_embed_relations
     global nlpEnt
     global crowdData
     
@@ -67,21 +68,20 @@ def init():
   }
   '''))
  
-    #TODO: check next time that this works
-    all_films_names = [str(lbl) for ent, lbl in all_movies]
+    all_films_names_nonunique = [str(lbl) for ent, lbl in all_movies]
+    all_films_names = list(set(all_films_names_nonunique))
     
+
     # 2 - BERT NER model loading
     tokenizer = AutoTokenizer.from_pretrained("dslim/bert-base-NER")
     model = AutoModelForTokenClassification.from_pretrained("dslim/bert-base-NER")
     
     nlpEnt = pipeline("ner", model=model, tokenizer=tokenizer)
     
-    # # 3 - Import relation names
-    # #import relation names
-    # global relation_names_df
-    # relation_names_df = pd.read_csv("relations_titles.csv")['Label']
+    # # 4 - Prepare relation names for embedding questions
+    all_embed_relations = list(rel2id.keys())
    
-    ## 4 - Load crowd data
+    ## 5 - Load crowd data
     crowd_data = pd.read_excel("crowd_data_processed.xlsx")
     #convert all links to URIref
     def convert_links_to_ent(text):

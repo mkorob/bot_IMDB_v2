@@ -38,27 +38,15 @@ class BotResponse:
         
         #match 
         name = [x in self.question for x in setup.all_films_names]
-        #name = [x in setup.all_films_names for x in names_str]
-        # if (any(name)):
-        #     matches = np.where(name)[0]
-        #     movie_rel_name = ""
-        #     for match_pos in range(len(matches)):
-        #         new_name = names_str[matches[match_pos]]
-        #         if len(new_name) > len(movie_rel_name):
-        #             movie_rel_name = new_name
+   
         if (any(name)):
             matches = np.where(name)[0]
-            # movie_rel_name = ""
-            #for match_pos in range(len(matches)):
-            #     new_name = setup.all_films_names[matches[match_pos]]
-            #     if len(new_name) > len(movie_rel_name):
-            #         movie_rel_name = new_name
-            
             #select all films that are matched
             all_films_matches = []
             for match_pos in range(len(matches)):
                 new_name = setup.all_films_names[matches[match_pos]]
                 add_film = True
+                #TODO: check that things like "R" and
                 #case 1- unrelated so you add
                 #case 2 - Batman is stored, and you overwrite with Batman Returns
                 #case 3- Batman Returns is there and you don't add
@@ -69,9 +57,14 @@ class BotResponse:
                             all_films_matches[pos] = new_name
                         if new_name in ex_film:
                             add_film = False
+                #if it's a one word thing make sure it's a word and not a substring
+                if (" " not in new_name):
+                    if(new_name not in sentence):
+                        add_film = False
                 if (add_film):
                     all_films_matches.append(new_name)
-            print(all_films_matches)
+                    
+         
     
         #person
         ner_results = setup.nlpEnt(self.question)

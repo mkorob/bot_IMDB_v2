@@ -29,7 +29,7 @@ class MariaBot():
                     if not self.chat_state[room_id]['initiated']:
                         # send a welcome message and get the alias of the agent in the chatroom
                         name_agent = room['alias'].split("_")[1]
-                        self.post_message(room_id=room_id, session_token=self.session_token, message=("Hi, my name is "+name_agent+", I am here to: 1) answer any questions you may have about movies, 2) recommend you a movie based on the movies you like or 3) show photos of cast of movies. How would you like to start?"))
+                        self.post_message(room_id=room_id, session_token=self.session_token, message=("Hi, my name is "+name_agent.capitalize()+", I am here to: 1) answer any questions you may have about movies, 2) recommend you a movie based on the movies you like or 3) show photos of cast of movies. How would you like to start?"))
                         self.chat_state[room_id]['initiated'] = True
                         self.chat_state[room_id]['my_alias'] = room['alias']
 

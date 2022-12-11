@@ -51,7 +51,7 @@ class MediaResponse:
             if id_photo == "":
                 response_out = "I don't seem to have any photos of "+self.names+" unfortunately... Do you want to see anyone else maybe?"
             else:
-                response_out = "image:<"+id_photo.split(".")[0]+">"
+                response_out = "image:"+id_photo.split(".")[0]
             
         return response_out
     

@@ -13,6 +13,9 @@ message = "Who directed The Bridge on the River Kwai?"
 #run by parts
 #Question 1 - Factual Question
 message = "Who directed The Bridge on the River Kwai?"
+message = "Who is the director of Star Wars: Episode VI - Return of the Jedi?"
+message = "Who is the director of Star Wars: Episode VI – Return of the Jedi?"
+message = "What is the genre of Shrek the Third?"
 botresponse = BotResponse(str(message))
 response = botresponse.answerQuestion()
 print(response)
@@ -41,6 +44,7 @@ print(response)
 
 #Question 5- Recommending Questions
 message = "Given that I like The Lion King, Pocahontas, and The Beauty and the Beast, can you recommend some movies?"
+#message = "Recommend me movies like Shrek the Third"
 botresponse = BotResponse(str(message))
 response = botresponse.answerQuestion()
 print(response)
