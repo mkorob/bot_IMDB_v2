@@ -11,6 +11,7 @@ import setup
 from sklearn.metrics import pairwise_distances
 import pandas as pd
 import numpy as np
+from utils_responses import pop_elements
 
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 
@@ -20,6 +21,10 @@ class FactResponse():
         self.movie_name = movie_name
         self.relation_urlstr = URIRef(relation_urlstr)
         self.relation_name = relation_name
+        self.bad_answers_out = [ "Sorry, I don't have this kind of information... Do you want to know anything else?",
+                         "Again, you are asking for something I have no information on... Let's try something else!",
+                         "Wow, you are very unlucky! You keep asking questions about the gaps in my data...",
+                         "No information again..."]
         
    
     
@@ -42,16 +47,16 @@ class FactResponse():
             
             
             if votes > 1:
-                response_out = "So this answer was actually improved by our human reviewers, who said that the correct answer is "+answer+ ". This was agreed by "+str(int(votes))+ " out of 3 voters who had an inter-rater agreement of "+ str(irr_agreement)+ "."
+                response_out = "So this answer was actually improved by our reviewers, who said that the correct answer is "+answer+ ". This was agreed by "+str(int(votes))+ " out of 3 voters who had an inter-rater agreement of "+ str(irr_agreement)+ "."
             else:
                 response_out = "So my response is "+ answer+ ", but "+ str(int(3-votes))+ " out of 3 of my human reviewers who have an inter-rater of agreement of "+str(irr_agreement)+ " told me that this answer is wrong.... They didn't have any better suggestions though, so there you go!"
                 
             return response_out
         
-        def list_items_and(list_attr):
+        def list_items_and(list_attr, prepositor):
             len_list = len(list_attr)
             pre_join = ", ".join(list_attr[0:(len_list-1)])
-            return pre_join+" and "+list_attr[len_list-1]
+            return pre_join+prepositor+list_attr[len_list-1]
         
         def closest_response(entity, relation, no_responses):
             #check if relation is in the embedding data (e.g. box office or year are not)
@@ -115,9 +120,9 @@ class FactResponse():
             #get closest responses
             embedding_answers = closest_response(movie_ent_id, self.relation_urlstr, 3)
             if len(embedding_answers) > 0:
-                response_out = "I don't know the exact answer, but I've analyzed similar movies and I think the answer should be "+list_items_and(embedding_answers)
+                response_out = "I don't know the exact answer, but I've analyzed similar movies and I think the answer should be "+list_items_and(embedding_answers, " or ")
             else:
-                response_out = "No information found, sorry!"
+                response_out = pop_elements(self.bad_answers_out)
             #TODO: check in embeddings
             return response_out
         
@@ -138,10 +143,8 @@ class FactResponse():
             #TODO: find package to return plural of the word?
             if len(res_dir) == 1:
                 response_out ="The "+self.relation_name +" of "+ self.movie_name + " is " +list(res_dir.values())[0]
-            elif len(res_dir) >1:
-                response_out = "There are " + str(len(res_dir))+ " films in the database under this name. Their " + self.relation_name+"s are "+list_items_and(list(res_dir.values()))
             else:
-                response_out = "No information found, sorry!"
+                response_out = "There are " + str(len(res_dir))+ " films in the database under this name. Their " + self.relation_name+"s are "+list_items_and(list(res_dir.values()), " and ")
             
             return response_out
             

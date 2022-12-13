@@ -9,6 +9,7 @@ Created on Sat Nov 19 16:57:58 2022
 !python -m pip install statsmodels
 import pandas as pd
 import numpy as np
+import rdflib
 import statsmodels as sm
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 WDT = rdflib.Namespace('http://www.wikidata.org/prop/direct/')

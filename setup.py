@@ -4,14 +4,13 @@ Created on Wed Dec  7 19:19:12 2022
 
 @author: maria
 """
-from transformers import AutoTokenizer, AutoModelForTokenClassification
+from transformers import AutoTokenizer, AutoModelForTokenClassification, AutoModelForSequenceClassification
 from transformers import pipeline
 import csv
 import numpy as np
 import rdflib
 import pandas as pd
 from rdflib import URIRef
-#setitimport crowd_data
 
 #start up the project - load data and initialize pretrained models
 def init():
@@ -28,14 +27,13 @@ def init():
     global all_embed_relations
     global nlpEnt
     global crowdData
+    global relationData
+    global tokenizerClass
+    global classSent
+    global json_dir
     
     #1 - load Data
-
-    # WD = rdflib.Namespace('http://www.wikidata.org/entity/')
-    # WDT = rdflib.Namespace('http://www.wikidata.org/prop/direct/')
-    # DDIS = rdflib.Namespace('http://ddis.ch/atai/')
     RDFS = rdflib.namespace.RDFS
-  #  SCHEMA = rdflib.Namespace('http://schema.org/')
     
     # load the graph
     graph = rdflib.Graph().parse('C:/Users/maria/Downloads/ddis-movie-graph_nt/14_graph.nt', format='turtle')
@@ -93,4 +91,20 @@ def init():
     crowd_data['relation'] = crowd_data['relation'].apply(convert_links_to_ent)
     crowd_data['final_answer'] = crowd_data['final_answer'].apply(convert_links_to_ent)
     crowdData = crowd_data
+    
+    #6 - Classifier model loading
+    tokenizerClass = AutoTokenizer.from_pretrained("mkorob/class-sent")
+    modelClass = AutoModelForSequenceClassification.from_pretrained("mkorob/class-sent")
+    classSent = pipeline("text-classification", model=modelClass, tokenizer=tokenizerClass)
+    
+    #7 - Relation names
+    relationData = pd.read_csv("relations_titles.csv")
+    
+    #8 - Image data
+    import urllib.request, json 
+    # TODO: move it out to data loading part so it doesn't need to load everytime a question is asked
+    with urllib.request.urlopen('https://files.ifi.uzh.ch/ddis/teaching/2021/ATAI/dataset/movienet/images.json') as url:
+        json_dir = json.load(url)
+
+    
    

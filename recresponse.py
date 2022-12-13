@@ -7,13 +7,15 @@ Created on Fri Dec  9 21:56:53 2022
 import rdflib
 import setup
 from sklearn.metrics import pairwise_distances
-import pandas as pd
-import numpy as np
 from collections import Counter
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 class RecResponse():
     def __init__(self, movie_names):
         self.movie_names = movie_names
+        self.recommended_prepositors = ["I made some recommendations for you... ",
+                                        "So what can I recommend is ",
+                                        "I have come up with the following - ",
+                                        "Similar movies would be - "]
         
         
     def answer_question(self):
@@ -21,7 +23,7 @@ class RecResponse():
             len_list = len(list_attr)
             if len_list > 1:
                 pre_join = ", ".join(list_attr[0:(len_list-1)])
-                list_attr = pre_join+" and "+list_attr[len_list-1]
+                list_attr = pre_join+" or "+list_attr[len_list-1]
             return list_attr
         
         def closest_response(movie_name, no_responses):
@@ -40,18 +42,7 @@ class RecResponse():
                 except:
                     most_likely_labels[entix] = ""
             
-            # df_results = pd.DataFrame([
-            #     (
-            #         setup.id2ent[idx][len(WD):], # qid
-            #         setup.ent2lbl[setup.id2ent[idx]],  # label
-            #         dist[idx],             # score
-            #         rank+1,                # rank
-            #     )
-            #     for rank, idx in enumerate(most_likely[:15])],
-            #     columns=('Entity', 'Label', 'Score', 'Rank'))
-            
             top_labels = most_likely_labels[0:no_responses]
-            #top_labels = np.unique(df_results['Label'][0:min(no_responses, len(df_results))].values)
             return top_labels
         
         labels_list = []
@@ -60,7 +51,8 @@ class RecResponse():
             labels_list = labels_list + list(similar_entities)
         
         if len(self.movie_names) == 1:
-            recommended_movies = labels_list[0:3]
+            #the first movie is the name of the movie itself
+            recommended_movies = labels_list[1:4]
         
         else:
             recommended_movies = []
