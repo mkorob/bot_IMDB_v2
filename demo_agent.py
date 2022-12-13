@@ -3,7 +3,10 @@ import atexit
 #import getpass
 import requests  # install the package via "pip install requests"
 from collections import defaultdict
-from botresponse import BotResponse
+from botresponsenew import BotResponseNew
+from recresponse import RecResponse
+from factresponse import FactResponse
+from image_search import MediaResponse
 
 # url of the speakeasy server
 url = 'https://speakeasy.ifi.uzh.ch'
@@ -36,7 +39,12 @@ class MariaBot():
                     # check for all messages
                     all_messages = self.check_room_state(room_id=room_id, since=0, session_token=self.session_token)['messages']
             
-
+                    #initiate classes that will be called (keep track of conversation)
+                    recresponse = RecResponse()
+                    mediaresponse = MediaResponse()
+                    factresponse = FactResponse()
+                    
+                    botresponse = BotResponseNew(factresponse, mediaresponse, recresponse)
                     # you can also use ["reactions"] to get the reactions of the messages: STAR, THUMBS_UP, THUMBS_DOWN
 
                     for message in all_messages:
@@ -48,8 +56,8 @@ class MariaBot():
                                 print('\t- Chatroom {} - new message #{}: \'{}\' - {}'.format(room_id, message['ordinal'], message['message'], self.get_time()))
 
                                 ##### You should call your agent here and get the response message #####
-                                botresponse = BotResponse(message['message'])
-                                response = botresponse.answerQuestion()
+                                #botresponse = BotResponseNew(message['message'])
+                                response = botresponse.answerQuestion(message['message'])
 
                                 self.post_message(room_id=room_id, session_token=self.session_token, message=response)
             time.sleep(listen_freq)

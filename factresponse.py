@@ -17,10 +17,7 @@ WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 
 #TODO: maybe initiate with an ID
 class FactResponse():
-    def __init__(self, movie_name, relation_urlstr, relation_name):
-        self.movie_name = movie_name
-        self.relation_urlstr = URIRef(relation_urlstr)
-        self.relation_name = relation_name
+    def __init__(self):
         self.bad_answers_out = [ "Sorry, I don't have this kind of information... Do you want to know anything else?",
                          "Again, you are asking for something I have no information on... Let's try something else!",
                          "Wow, you are very unlucky! You keep asking questions about the gaps in my data...",
@@ -28,7 +25,10 @@ class FactResponse():
         
    
     
-    def answer_question(self):
+    def answer_question(self, movie_name, relation_urlstr, relation_name):
+        self.movie_name = movie_name
+        self.relation_urlstr = URIRef(relation_urlstr)
+        self.relation_name = relation_name
         
         def give_response(entity, relation):
             

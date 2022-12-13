@@ -13,17 +13,17 @@ link_images = "https://files.ifi.uzh.ch/ddis/teaching/2021/ATAI/dataset/movienet
 
 
 class MediaResponse:
-    def __init__(self, names):
+    def __init__(self):
+        self.answers_out = ["I don't seem to have any photos of "]
+        
+    def answer_question(self, names):
         self.names = names[0]
-        
-    def answer_question(self):
-        
         response_out = "I messed up somewhere.."
         
-        #names_out = []
-        #for name in self.names:
+        # names_out = []
+        # for name in self.names:
         
-        #TODO: Check response if more than one matches by name
+    #TODO: Check response if more than one matches by name
         query_ex = """
                       prefix wdt: <http://www.wikidata.org/prop/direct/>
                       prefix wd: <http://www.wikidata.org/entity/>
@@ -38,31 +38,34 @@ class MediaResponse:
         
         imdb_id = [movieid for ent, movieid in qres2]
             # if len(imdb_id) > 0:
-            #     names_out.append(imdb_id[0])
+            #     names_out.append(str(imdb_id[0]))
     
-        #TODO: include photos which are multi-cast
-        #if len(imdb_id) ==1:
-        # if len(names_out) == 0:
-        #     return "I can't find an actor ID in my database unfortunately... Can you check the name spelling?"
+        # #TODO: include photos which are multi-cast
+        if len(imdb_id) == 0:
+              return "I can't find an actor ID in my database unfortunately... Can you check the name spelling?"
+        
         
         # print(names_out)
+        # print(names_out)
+        # print(imdb_id)
         imdb_id = str(imdb_id[0])
+        print(imdb_id)
         # get first match
         id_photo = ""
         for load in setup.json_dir:
-             if load['cast'] == [imdb_id]:
-                 id_photo = load['img']
-                 break
+              if load['cast'] == [imdb_id]:
+                  id_photo = load['img']
+                  break
         
         # for load in setup.json_dir:
             
-        #     if set(names_out).issubset(set(load['cast'])):
-        #         id_photo = load['img']
-        #         break
+        #      if set(names_out).issubset(set(load['cast'])):
+        #          id_photo = load['img']
+        #          break
         #check if there are any matches
         if id_photo == "":
             if len(self.names) == 1:
-                response_out = "I don't seem to have any photos of "+self.names+" unfortunately... Do you want to see anyone else maybe?"
+                response_out = self.answers_out[0]+self.names+" unfortunately... Do you want to see anyone else maybe?"
             else:
                 response_out = "I don't have a photo of them together.. Ask for a photo of just one of them!"
         else:

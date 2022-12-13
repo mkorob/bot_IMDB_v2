@@ -19,7 +19,8 @@ message = "What is the genre of Shrek?"
 message = "who directed inception"
 from botresponsenew import BotResponseNew
 message = "What is the genre of The Silence of the Lambs?"
-message = "who directed inception"
+message = "who plays maugli in the jungle book"
+#message = "who directed inception"
 botresponse = BotResponseNew(str(message))
 response = botresponse.answerQuestion()
 print(response)
@@ -44,7 +45,7 @@ print(response)
 #Question 4 - Embedding Question
 message = "What is the genre of Good Neighbors?"
 message = "What is the box office of Finding Dory?"
-message = "What is the genre of Good Neighbors?"
+message = "Recommend me movies like Joker and Batman Returns"
 botresponse = BotResponseNew(str(message))
 response = botresponse.answerQuestion()
 print(response)

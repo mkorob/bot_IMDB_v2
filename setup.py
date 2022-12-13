@@ -24,6 +24,7 @@ def init():
     global entity_emb
     global relation_emb
     global all_films_names
+    global all_actors_names
     global all_embed_relations
     global nlpEnt
     global crowdData
@@ -31,6 +32,7 @@ def init():
     global tokenizerClass
     global classSent
     global json_dir
+    global namesPersons
     
     #1 - load Data
     RDFS = rdflib.namespace.RDFS
@@ -105,6 +107,21 @@ def init():
     # TODO: move it out to data loading part so it doesn't need to load everytime a question is asked
     with urllib.request.urlopen('https://files.ifi.uzh.ch/ddis/teaching/2021/ATAI/dataset/movienet/images.json') as url:
         json_dir = json.load(url)
+        
+    #10 - Load all cast
+    all_actors = set(graph.query('''
+  prefix wdt: <http://www.wikidata.org/prop/direct/>
+  prefix wd: <http://www.wikidata.org/entity/>
+
+  SELECT ?act ?lbl WHERE {
+     ?ent wdt:P31/wdt:P279* wd:Q11424 .
+     ?ent wdt:P161 ?act .
+     ?act rdfs:label ?lbl.
+  }
+  '''))
+ 
+    all_actors_names_nonunique = [str(lbl) for ent, lbl in all_actors]
+    all_actors_names = list(set(all_actors_names_nonunique))
 
     
    

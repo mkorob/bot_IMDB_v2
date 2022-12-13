@@ -20,13 +20,16 @@ from factresponse import FactResponse
 from recresponse import RecResponse
 import setup
 from Levenshtein import distance as lev
-from utils_responses import pop_elements
+from utils_responses import reduce_list
 import itertools
 
 
 class BotResponseNew:
-    def __init__(self, question):
-        self.question = question
+    def __init__(self, factresponse, mediaresponse, recresponse):
+        #self.question = question
+        self.factresponse = factresponse
+        self.mediaresponse = mediaresponse
+        self.recresponse = recresponse
         self.irrelevant_answers_out = [ "Are we just chatting? I think we don't have time for that, I've got to pass this course...",
                         "I think you aren't asking me about things that I know, please ask me about movies! :)",
                         "This isn't a question about movies or media, is it....?",
@@ -42,7 +45,9 @@ class BotResponseNew:
                                   "Please check your spelling!"]
         
         
-    def answerQuestion(self):
+    def answerQuestion(self, question):
+        self.question = question
+       
         
         def join_ners(type_ner, nlp_patch):
             types_ner = ["B-"+type_ner, "I-"+type_ner]
@@ -60,14 +65,13 @@ class BotResponseNew:
                             
             return out_array
   
+        # try:
         # PART 0 - check if there are any NER and People (PER-NER)
         # don't jum the gun because NER is case-sensitive
         ner_results = setup.nlpEnt(self.question)
-        names_question = join_ners("PER", ner_results)
-        labels = ["comp", "rec", "media", "fact", "random"]
-        class_p = labels[int(setup.classSent(self.question)[0]['label'][6])]
+        #names_question = join_ners("PER", ner_results)
         
-        #PART 2- find all subsets of words
+        #PART 1- find all subsets of words
         question_minus_punct = re.sub(",","", self.question).lower()
         all_spaces = []
         for pos, sentstr in enumerate(question_minus_punct):
@@ -93,14 +97,14 @@ class BotResponseNew:
                 #[3, 5, 8, 9, 10]  - 35, 38, 39, 310, 
                 
         
-        # PART 1- check if there is a movie title in the input or a person
+        # PART 2- check if there is a movie title in the input or a person
         #print(self.question)
         #match with minimum levenshtein distance 2
         movie_matches_pos = []
         for movie_pos, moviename in enumerate(setup.all_films_names):
             for substrsent in all_subsets:
                 if lev(moviename.lower(), substrsent) < (len(substrsent)/20) and substrsent not in stopwords.words('english'):
-                    print(moviename+substrsent)
+                    
                     movie_matches_pos.append(movie_pos)
                     
         #make sure to not have any obverwrites, e.g. Batman and Batman Returns need to be one only           
@@ -125,13 +129,40 @@ class BotResponseNew:
                     all_films_matches.append(new_name)
             all_films_matches = list(set(all_films_matches))
             print(all_films_matches)
+            
+        #names - NER had to be scrapped because it doesn't want to accept Meryl Streep
+        names_question = []
+        for subset in all_subsets:
+            for actname in setup.all_actors_names:
+                if lev(actname.lower(), subset) < 2 and len(actname) > 3 and actname not in names_question:
+                    names_question.append(actname)
+        print(names_question)
+        
+        #clean string for classification
+        class_str = self.question
+        if len(movie_matches_pos) >0:
+            for mov in all_films_matches:
+                class_str = re.sub(mov, "_movie_", class_str)
+        if len(names_question) > 0:
+            for nam in names_question:
+                class_str = re.sub(nam.lower(), "_person_", class_str)
+            
+            
+        #classify 
+        print(class_str)
+        labels = ["comp", "rec", "media", "fact", "random"]
+        class_p = labels[int(setup.classSent(class_str)[0]['label'][6])]
                     
         #if neither can be found exit
         if len(names_question) == 0 and len(movie_matches_pos) == 0:
             if len(ner_results) == 0 and class_p == "random":
-                return pop_elements(self.irrelevant_answers_out)
+                strout = self.irrelevant_answers_out[0]
+                self.irrelevant_answers_out = reduce_list(self.irrelevant_answers_out)
+                return strout
             else:
-                return pop_elements(self.typos_answers_out)
+                strout = self.typos_answers_out[0]
+                self.typos_answers_out = reduce_list(self.typos_answers_out)
+                return strout
                 
         #Part 3 - CLASSIFY QUESTION
         
@@ -186,14 +217,19 @@ class BotResponseNew:
         if class_response == "comp":
             return pop_elements(self.complicated_answers_out)
         if class_response == "fact":
-            response_query = FactResponse(all_films_matches[0], relation, relation_name)
+            #response_query = FactResponse(all_films_matches[0], relation, relation_name)
+            response_out = self.factresponse.answer_question(all_films_matches[0], relation, relation_name)
             
         if class_response == "rec":
-            response_query = RecResponse(all_films_matches)
+            #response_query = RecResponse(all_films_matches)
+            response_out = self.recresponse.answer_question(all_films_matches)
         
         if class_response == "media":
-            response_query = MediaResponse(names_question)
+            #response_query = MediaResponse(names_question)
+            response_out = self.mediaresponse.answer_question(names_question)
     
             
-        response_out = response_query.answer_question()
+        #response_out = response_query.answer_question()
         return response_out
+        # except:
+        #     return "I am having some issue processing your query, sorry!"

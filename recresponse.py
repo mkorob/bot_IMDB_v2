@@ -8,23 +8,27 @@ import rdflib
 import setup
 from sklearn.metrics import pairwise_distances
 from collections import Counter
+from utils_responses import pop_elements
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 class RecResponse():
-    def __init__(self, movie_names):
-        self.movie_names = movie_names
+    def __init__(self):
+        
         self.recommended_prepositors = ["I made some recommendations for you... ",
                                         "So what can I recommend is ",
                                         "I have come up with the following - ",
                                         "Similar movies would be - "]
         
         
-    def answer_question(self):
+    def answer_question(self, movie_names):
+        self.movie_names = movie_names
         def list_items_and(list_attr):
             len_list = len(list_attr)
             if len_list > 1:
                 pre_join = ", ".join(list_attr[0:(len_list-1)])
-                list_attr = pre_join+" or "+list_attr[len_list-1]
-            return list_attr
+                outr = pre_join+" or "+list_attr[len_list-1]
+            else:
+                outr = list_attr[0]
+            return outr
         
         def closest_response(movie_name, no_responses):
             # get embedding of the entity
@@ -33,16 +37,16 @@ class RecResponse():
             dist = pairwise_distances(setup.entity_emb[ent].reshape(1, -1), setup.entity_emb).reshape(-1)
             # order by plausibility
             most_likely = dist.argsort()
-            most_likely_entities = [setup.id2ent[idx] for idx in most_likely[:10]]
+            most_likely_entities = [setup.id2ent[idx] for idx in most_likely[:no_responses]]
             #some entities pulled from embeddings don't have labels
-            most_likely_labels = [""]*10
+            most_likely_labels = [""]*no_responses
             for entix, ent in enumerate(most_likely_entities):
                 try:
                     most_likely_labels[entix] = setup.ent2lbl[ent]
                 except:
                     most_likely_labels[entix] = ""
             
-            top_labels = most_likely_labels[0:no_responses]
+            top_labels = most_likely_labels[0:10]
             return top_labels
         
         labels_list = []
@@ -67,11 +71,15 @@ class RecResponse():
                     if len(recommended_movies) == 3:
                         break
         
+        print(recommended_movies)
         #formulate answer
         if len(recommended_movies) == 0:
             response_out = "Seems like you are asking about very different movies.. Can you think of something more similar?"
         else:
-            response_out = "I made some recommendations for you... "+list_items_and(recommended_movies)
-            
+            preresp = self.recommended_prepositors[0]
+            if len(self.recommended_prepositors)  > 1:
+                self.recommended_prepositors = self.recommended_prepositors[1:]
+                print(self.recommended_prepositors)
+            response_out = preresp+list_items_and(recommended_movies)
         return response_out
         
