@@ -30,11 +30,12 @@ It is able to answer three types of queries:
  ### Classifier Model
  The model used to classify user-typed input into one of the types of question was a customly fine-tuned BERT transformer model by me using a small training dataset of 50 rows.
  
- ```from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+ ```diff
+	from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 	tokenizerClass = AutoTokenizer.from_pretrained("mkorob/class-sent")
 	modelClass = AutoModelForSequenceClassification.from_pretrained("mkorob/class-sent")
 	classSent = pipeline("text-classification", model=modelClass, tokenizer=tokenizerClass)
-    ```
+ ```
  The model has 5 classes: 0 - complicated question (requiring more than one query), 1 - recommendation question, 2 - media question, 3- factual question, 4 - random question (not regarding movies or actors), and was trained on a small 
 
 ## Operation Instructions
