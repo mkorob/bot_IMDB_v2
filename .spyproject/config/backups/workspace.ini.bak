@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['launch.py', 'botresponsenew.py', 'demo_agent.py', 'setup.py', 'image_search.py', 'factresponse.py', 'recresponse.py', 'test_home.py', 'question_classifier.py', 'utils_responses.py', 'crowd_data.tsv', 'crowd_data.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\IPython\\extensions\\autoreload.py']
+recent_files = ['launch.py', 'setup\\setup.py', 'demo_agent.py', 'responsebots\\botresponsefinal.py', 'test_home.py', '..\\..\\..\\..\\anaconda3\\lib\\site-packages\\IPython\\extensions\\autoreload.py', 'setup\\__init__.py']
 
 [main]
 version = 0.2.0

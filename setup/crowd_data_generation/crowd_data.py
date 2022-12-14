@@ -6,7 +6,7 @@ Created on Sat Nov 19 16:57:58 2022
 """
 ## This file processes the crowd data used to augment the agent
 
-!python -m pip install statsmodels
+#!python -m pip install statsmodels
 import pandas as pd
 import numpy as np
 import rdflib

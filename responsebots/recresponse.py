@@ -5,7 +5,7 @@ Created on Fri Dec  9 21:56:53 2022
 @author: maria
 """
 import rdflib
-import setup
+import setup.setup as setup
 from sklearn.metrics import pairwise_distances
 from collections import Counter
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
@@ -29,9 +29,9 @@ class RecResponse():
                 outr = list_attr[0]
             return outr
         
-        def closest_response(movie_name, no_responses):
+        def closest_response(movie_ent_id, no_responses):
             # get embedding of the entity
-            ent = setup.ent2id[setup.lbl2ent[movie_name]]
+            ent = setup.ent2id[movie_ent_id]
             # we compare the embedding of the query entity to all other entity embeddings
             dist = pairwise_distances(setup.entity_emb[ent].reshape(1, -1), setup.entity_emb).reshape(-1)
             # order by plausibility
@@ -45,13 +45,35 @@ class RecResponse():
                 except:
                     most_likely_labels[entix] = ""
             
-            top_labels = most_likely_labels[0:10]
+            top_labels = most_likely_labels[0:no_responses]
             return top_labels
         
-        labels_list = []
+        movieids_list = []
         for name in self.movie_names:
-            similar_entities = closest_response(name, 10)
+            
+            #First pull ID anyways - lbl2ent has all entities, e.g. Batman will map to the superhero
+            query_ex = """
+                     prefix wdt: <http://www.wikidata.org/prop/direct/>
+                     prefix wd: <http://www.wikidata.org/entity/>
+                     
+                     SELECT ?ent ?lbl WHERE {
+                         ?ent rdfs:label ?label.
+                         ?ent wdt:P31/wdt:P279* wd:Q11424 .
+                     }
+                     """
+            
+            #run the query
+            qres2 = setup.graph.query(query_ex, initBindings={'label': rdflib.Literal(name, lang = "en")})
+            res_dir = {ent for ent, lbl in qres2}
+            movie_ids = list(res_dir)
+            movieids_list = movieids_list +movie_ids
+        
+        labels_list = []
+        for movieid in movieids_list:
+            
+            similar_entities = closest_response(movieid, 15)
             labels_list = labels_list + list(similar_entities)
+        
         
         if len(self.movie_names) == 1:
             #the first movie is the name of the movie itself
@@ -60,17 +82,16 @@ class RecResponse():
         else:
             recommended_movies = []
         #get the first item with maximum occurrences
-            counter = Counter(labels_list)
-            counts = list(counter.values())
-            max_count = max(counts)
+            counter = Counter(labels_list).most_common()
+            #counts = list(counter.values())
+            max_count = counter[0][1]
             if max_count > 1:
-                for idx, count_key in enumerate(list(counter.keys())):
-                    if counts[idx] == max_count and count_key not in self.movie_names:
-                        recommended_movies.append(count_key)
+                for count_pair in counter:
+                    if count_pair[1] >1 and count_pair[0] not in self.movie_names:
+                         recommended_movies.append(count_pair[0])
                     if len(recommended_movies) == 3:
-                        break
+                         break
         
-        print(recommended_movies)
         #formulate answer
         if len(recommended_movies) == 0:
             response_out = "Seems like you are asking about very different movies.. Can you think of something more similar?"
@@ -79,6 +100,6 @@ class RecResponse():
             if len(self.recommended_prepositors)  > 1:
                 self.recommended_prepositors = self.recommended_prepositors[1:]
                 print(self.recommended_prepositors)
-            response_out = preresp+list_items_and(recommended_movies)
+            response_out = preresp+list_items_and(list(set(recommended_movies)))
         return response_out
         

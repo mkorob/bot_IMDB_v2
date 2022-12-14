@@ -7,7 +7,7 @@ Created on Sat Dec  3 23:05:21 2022
 #from torchvision.io import read_image
 #import urllib.request, json 
 from rdflib import Literal
-import setup
+import setup.setup as setup
 
 link_images = "https://files.ifi.uzh.ch/ddis/teaching/2021/ATAI/dataset/movienet/"
 

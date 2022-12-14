@@ -1,12 +1,11 @@
 import time
 import atexit
-#import getpass
 import requests  # install the package via "pip install requests"
 from collections import defaultdict
-from botresponsenew import BotResponseNew
-from recresponse import RecResponse
-from factresponse import FactResponse
-from image_search import MediaResponse
+from responsebots.botresponsefinal import BotResponseFinal
+from responsebots.recresponse import RecResponse
+from responsebots.factresponse import FactResponse
+from responsebots.image_search import MediaResponse
 
 # url of the speakeasy server
 url = 'https://speakeasy.ifi.uzh.ch'
@@ -41,7 +40,7 @@ class MariaBot():
                         mediaresponse = MediaResponse()
                         factresponse = FactResponse()
                         
-                        botresponse = BotResponseNew(factresponse, mediaresponse, recresponse)
+                        botresponse = BotResponseFinal(factresponse, mediaresponse, recresponse)
 
                     # check for all messages
                     all_messages = self.check_room_state(room_id=room_id, since=0, session_token=self.session_token)['messages']

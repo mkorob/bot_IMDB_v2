@@ -12,8 +12,9 @@ import rdflib
 import pandas as pd
 from rdflib import URIRef
 
+
 #start up the project - load data and initialize pretrained models
-def init():
+def initiate(location_KG, location_emb):
     global graph
     global lbl2ent
     global ent2lbl
@@ -38,17 +39,17 @@ def init():
     RDFS = rdflib.namespace.RDFS
     
     # load the graph
-    graph = rdflib.Graph().parse('C:/Users/maria/Downloads/ddis-movie-graph_nt/14_graph.nt', format='turtle')
+    graph = rdflib.Graph().parse(location_KG+'/14_graph.nt', format='turtle')
     
     # load embeddings
-    entity_emb = np.load('C:/Users/maria/OneDrive/Documents/GitHub/embeddings/ddis-graph-embeddings/entity_embeds.npy')
-    relation_emb = np.load('C:/Users/maria/OneDrive/Documents/GitHub/embeddings/ddis-graph-embeddings/relation_embeds.npy')
+    entity_emb = np.load(location_emb+'/entity_embeds.npy')
+    relation_emb = np.load(location_emb+'/relation_embeds.npy')
     
     #load dictionaries
-    with open('C:/Users/maria/OneDrive/Documents/GitHub/embeddings/ddis-graph-embeddings/entity_ids.del', 'r') as ifile:
+    with open(location_emb+'/entity_ids.del', 'r') as ifile:
         ent2id = {rdflib.term.URIRef(ent): int(idx) for idx, ent in csv.reader(ifile, delimiter='\t')}
         id2ent = {v: k for k, v in ent2id.items()}
-    with open('C:/Users/maria/OneDrive/Documents/GitHub/embeddings/ddis-graph-embeddings/relation_ids.del', 'r') as ifile:
+    with open(location_emb+'/relation_ids.del', 'r') as ifile:
         rel2id = {rdflib.term.URIRef(rel): int(idx) for idx, rel in csv.reader(ifile, delimiter='\t')}
         id2rel = {v: k for k, v in rel2id.items()}
     
@@ -75,7 +76,10 @@ def init():
     all_films_names.remove("The Box")
     all_films_names.remove("Office")
     all_films_names.remove("Image")
-    
+    all_films_names.remove("Look")
+    all_films_names.remove("Tell")
+    all_films_names.remove("Company")
+    all_films_names.remove("Play")
 
     # 2 - BERT NER model loading
     tokenizer = AutoTokenizer.from_pretrained("dslim/bert-base-NER")
@@ -87,7 +91,7 @@ def init():
     all_embed_relations = list(rel2id.keys())
    
     ## 5 - Load crowd data
-    crowd_data = pd.read_excel("crowd_data_processed.xlsx")
+    crowd_data = pd.read_excel("setup/crowd_data_processed.xlsx")
     #convert all links to URIref
     def convert_links_to_ent(text):
         if(text[0:4] == "http"):
@@ -105,7 +109,7 @@ def init():
     classSent = pipeline("text-classification", model=modelClass, tokenizer=tokenizerClass)
     
     #7 - Relation names
-    relationData = pd.read_csv("relations_titles.csv")
+    relationData = pd.read_csv("setup/relations_titles.csv")
     
     #8 - Image data
     import urllib.request, json 

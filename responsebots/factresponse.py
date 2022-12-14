@@ -7,9 +7,9 @@ Created on Wed Nov 30 23:25:13 2022
 import rdflib
 from rdflib import URIRef
 from rdflib import Literal
-import setup
+import setup.setup as setup
 from sklearn.metrics import pairwise_distances
-from utils_responses import reduce_list
+from responsebots.utils_responses import reduce_list
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 
 #TODO: maybe initiate with an ID
