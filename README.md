@@ -52,14 +52,14 @@ Speakeasy Way:
 1. Define location of the knowledge graph and embedding information in *launch.py* and execute the file.
 2. Run demo agent *demo_agent.py*
 
-You should now be able to converse with maria.korobeynikova_bot chatbot in the Speakeasy environment.
+You should now be able to converse with the *maria.korobeynikova_bot* chatbot in the Speakeasy environment.
 
 Local testing way:
 1. Define location of the knowledge graph and embedding information in *test_home.py*
 2. Uncomment the question out of list of provided questions by section and run *test_home.py*
 
    
- ### Notes on classifier Model
+ ### Notes on the classifier model
  The model used to classify user-typed input into one of the types of question was a customly fine-tuned BERT transformer model by me using a small balanced training dataset of ~50 rows (training and validation data can be found in /classifiermodel/question_builder.xlsx).
  It was trained in the Google Colab notebook found in the same folder and then puushed to Huggingface to my account (mkorob) to be imported in the local installation.
  ```diff
