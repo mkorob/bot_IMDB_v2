@@ -8,7 +8,6 @@ import rdflib
 import setup
 from sklearn.metrics import pairwise_distances
 from collections import Counter
-from utils_responses import pop_elements
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 class RecResponse():
     def __init__(self):

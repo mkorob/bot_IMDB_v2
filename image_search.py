@@ -5,7 +5,7 @@ Created on Sat Dec  3 23:05:21 2022
 @author: maria
 """
 #from torchvision.io import read_image
-import urllib.request, json 
+#import urllib.request, json 
 from rdflib import Literal
 import setup
 
@@ -17,14 +17,14 @@ class MediaResponse:
         self.answers_out = ["I don't seem to have any photos of "]
         
     def answer_question(self, names):
-        self.names = names[0]
+        self.names = names
         response_out = "I messed up somewhere.."
         
-        # names_out = []
-        # for name in self.names:
+        names_out = []
+        for name in self.names:
         
     #TODO: Check response if more than one matches by name
-        query_ex = """
+            query_ex = """
                       prefix wdt: <http://www.wikidata.org/prop/direct/>
                       prefix wd: <http://www.wikidata.org/entity/>
                       
@@ -34,34 +34,29 @@ class MediaResponse:
                       }
                       """
                   
-        qres2 = setup.graph.query(query_ex, initBindings={'label': Literal(self.names, lang = "en")}) 
+            qres2 = setup.graph.query(query_ex, initBindings={'label': Literal(name, lang = "en")}) 
         
-        imdb_id = [movieid for ent, movieid in qres2]
-            # if len(imdb_id) > 0:
-            #     names_out.append(str(imdb_id[0]))
+            imdb_id = [str(movieid) for ent, movieid in qres2]
+            if len(imdb_id) > 0:
+                 names_out.append(imdb_id[0])
     
-        # #TODO: include photos which are multi-cast
-        if len(imdb_id) == 0:
+        
+        if len(names_out) == 0:
               return "I can't find an actor ID in my database unfortunately... Can you check the name spelling?"
         
-        
-        # print(names_out)
-        # print(names_out)
-        # print(imdb_id)
-        imdb_id = str(imdb_id[0])
-        print(imdb_id)
-        # get first match
+        print(names_out)
         id_photo = ""
-        for load in setup.json_dir:
-              if load['cast'] == [imdb_id]:
+        if len(self.names) ==1:
+            for load in setup.json_dir:
+               if load['cast'] == names_out:
+                   id_photo = load['img']
+                   break
+        #only run this if more than one person or you can't find an image of just one person
+        if len(self.names) > 1 or id_photo == "":
+            for load in setup.json_dir:
+              if set(names_out).issubset(set(load['cast'])):
                   id_photo = load['img']
                   break
-        
-        # for load in setup.json_dir:
-            
-        #      if set(names_out).issubset(set(load['cast'])):
-        #          id_photo = load['img']
-        #          break
         #check if there are any matches
         if id_photo == "":
             if len(self.names) == 1:

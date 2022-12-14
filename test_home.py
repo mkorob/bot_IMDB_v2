@@ -61,4 +61,12 @@ print(response)
 ###NOTES
 # questions not working
 #Who is the director of Star Wars: Episode VI - Return of the Jedi?
-
+from botresponsenew import BotResponseNew
+from recresponse import RecResponse
+from factresponse import FactResponse
+from image_search import MediaResponse
+recresponse = RecResponse()
+mediaresponse = MediaResponse()
+factresponse = FactResponse()
+botresponse = BotResponseNew(factresponse, mediaresponse, recresponse)
+response = botresponse.answerQuestion("Given that I like The Lion King, Pocahontas, and The Beauty and the Beast, can you recommend some movies?")

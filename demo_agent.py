@@ -35,16 +35,17 @@ class MariaBot():
                         self.post_message(room_id=room_id, session_token=self.session_token, message=("Hi, my name is "+name_agent.capitalize()+", I am here to: 1) answer any questions you may have about movies, 2) recommend you a movie based on the movies you like or 3) show photos of cast of movies. How would you like to start?"))
                         self.chat_state[room_id]['initiated'] = True
                         self.chat_state[room_id]['my_alias'] = room['alias']
+                        
+                        #initiate classes that will be called (keep track of conversation)
+                        recresponse = RecResponse()
+                        mediaresponse = MediaResponse()
+                        factresponse = FactResponse()
+                        
+                        botresponse = BotResponseNew(factresponse, mediaresponse, recresponse)
 
                     # check for all messages
                     all_messages = self.check_room_state(room_id=room_id, since=0, session_token=self.session_token)['messages']
-            
-                    #initiate classes that will be called (keep track of conversation)
-                    recresponse = RecResponse()
-                    mediaresponse = MediaResponse()
-                    factresponse = FactResponse()
-                    
-                    botresponse = BotResponseNew(factresponse, mediaresponse, recresponse)
+                   
                     # you can also use ["reactions"] to get the reactions of the messages: STAR, THUMBS_UP, THUMBS_DOWN
 
                     for message in all_messages:

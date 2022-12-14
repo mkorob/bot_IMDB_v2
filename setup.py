@@ -71,6 +71,11 @@ def init():
     all_films_names_nonunique = [str(lbl) for ent, lbl in all_movies]
     all_films_names = list(set(all_films_names_nonunique))
     
+    #manually remove films that are causing erros
+    all_films_names.remove("The Box")
+    all_films_names.remove("Office")
+    all_films_names.remove("Image")
+    
 
     # 2 - BERT NER model loading
     tokenizer = AutoTokenizer.from_pretrained("dslim/bert-base-NER")
@@ -104,7 +109,6 @@ def init():
     
     #8 - Image data
     import urllib.request, json 
-    # TODO: move it out to data loading part so it doesn't need to load everytime a question is asked
     with urllib.request.urlopen('https://files.ifi.uzh.ch/ddis/teaching/2021/ATAI/dataset/movienet/images.json') as url:
         json_dir = json.load(url)
         
@@ -121,7 +125,8 @@ def init():
   '''))
  
     all_actors_names_nonunique = [str(lbl) for ent, lbl in all_actors]
-    all_actors_names = list(set(all_actors_names_nonunique))
+    all_actors_names_un = list(set(all_actors_names_nonunique))
+    all_actors_names = [act for act in all_actors_names_un if " " in act] 
 
     
    

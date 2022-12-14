@@ -9,10 +9,7 @@ from rdflib import URIRef
 from rdflib import Literal
 import setup
 from sklearn.metrics import pairwise_distances
-import pandas as pd
-import numpy as np
-from utils_responses import pop_elements
-
+from utils_responses import reduce_list
 WD = rdflib.Namespace('http://www.wikidata.org/entity/')
 
 #TODO: maybe initiate with an ID
@@ -122,7 +119,8 @@ class FactResponse():
             if len(embedding_answers) > 0:
                 response_out = "I don't know the exact answer, but I've analyzed similar movies and I think the answer should be "+list_items_and(embedding_answers, " or ")
             else:
-                response_out = pop_elements(self.bad_answers_out)
+                response_out = self.bad_answers_out[0]
+                self.bad_answers_out = reduce_list(self.bad_answers_out)
             #TODO: check in embeddings
             return response_out
         
