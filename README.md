@@ -37,8 +37,8 @@ This application was developed in Spyer, with User Module Reloader (UMR) disable
 
 ## How It Works
 ### Methodology
-1. The agent receives the question from the user in *demo_agent.py* and passes it to its individual instance of BotResponseNew.
-2. BotResponseNew retrives named entities from the question (film names and actors names), Wikidata relation properties and classifies the question as one of the three questions described above usng a custom BERT-based model (see more infromation below) and manual corrections. There are then three options:
+1. The agent receives the question from the user in *demo_agent.py* and passes it to its individual instance of BotResponseFinal.
+2. BotResponseFinal retrives named entities from the question (film names and actors names), Wikidata relation properties and classifies the question as one of the three questions described above usng a custom BERT-based model (see more infromation below) and manual corrections. There are then three options:
   * factual questions are passed to a FactResponse instance with movie names and relationships as parameters, which first tries to look up the query in the knowledge graph, checks that the answer isn't covered by crowd data. If no information is found, it will provide closest guesses from the embedding data.
   Priority is given to crowd data, then to knowledge graph answers, and only finally to embeddings. 
   * recommendation questions are passed to a RecResponse instance with movie names as parameters, where it tries to find most common neighbours of all the movies provided, and returns matches based on 15 most similar movies for each film.
