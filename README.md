@@ -32,8 +32,8 @@ Depending on your existing installations, additional installations of packages m
 
 Note: there have been reported inconsitencies between inconsistent versions of requests, urrlib and transformers. If issues arise, try uninstalling and reinstalling requests.
 
-### Additional configurations.
-This application was developed in Spyer, with User Module Reloader (UMR) disabled. Depending on your Python interpreter, you may need to ensure that your environment does not automatically reload modules on every import.
+### Additional configurations
+This application was developed in Spyder, with User Module Reloader (UMR) disabled. Depending on your Python interpreter, you may need to ensure that your environment does not automatically reload modules on every import.
 
 ## How It Works
 ### Methodology
